@@ -1,7 +1,6 @@
 import { createGlobalStyle } from "styled-components";
 import Router from "./Router";
 import { ReactQueryDevtools } from "react-query/devtools";
-// react query는 api.ts에 적어놨듯, 캐시에 데이터를 저장하는데 이것을 시각적으로 보기 위해 devtools을 제공하는데, 이걸 이용하면 캐시에 있는 query를 볼 수 있다.
 import { ThemeProvider } from "styled-components";
 import { darkTheme, lightTheme } from "./theme";
 import {useState} from "react"
@@ -73,14 +72,10 @@ a {
 `;
 
 function App() {
-  // const [isDark, setIsDark] = useState(true);
-  // const toggleDark = () => setIsDark(current => !current)
-  // 만약 리코일 없다면 이렇게 해서 원하는 컴포넌트까지 props 계속 전달해줘야한다. 이 부분  5.1~5.2
   const isDark = useRecoilValue(isDarkAtom)
   return (
     <>
       <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
-        {/* ThemProvider를 index.ts에서 App.tsx로 옮겼다. state를 사용하기 위해서 */}
         <GlobalStyle />
         <Router/>
         <ReactQueryDevtools initialIsOpen={true} />
@@ -90,22 +85,4 @@ function App() {
 }
 
 export default App;
-
-
-// global state란 이런 것이다.
-// App(isDark, modifierFn)
-//   -> Router -> Coins (modifier)
-//   -> Router -> Coin -> Chart (isDark)
-// 즉,
-// isDark : App -> Router -> Coin -> Chart
-// toggleDark : App -> Router -> Coins
-
-
-// 만약 state management를 사용한다면?
-// 위처럼 부모가 자식에게 prop을 내려주는 계층 구조 대신에
-
-// Header -> (isDark) <- Chart
-// state를 어떤 비눗방울 안에 넣고, chart가 접근할 수 있도록 한다. Header도 접근할 수 있다. App.js에서도 마찬가지로 접근할 수 있다. 
-
-// 근데 themeProvider에서는 맨 위 컴포넌트에 주니 다른 컴포넌트들 다 props로 받을 수 있었는데?
 
